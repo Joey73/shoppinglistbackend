@@ -1,43 +1,46 @@
-openapi: "3.0.0"
+openapi: 3.0.1
 info:
-  description: Just a test
-  version: "1.0.0"
-  title: Shopping List
-  termsOfService: 'http://swagger.io/terms/'
-  contact:
-    email: a@bc.de
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
 paths:
   /items:
     get:
-      summary: Get all items
+      tags:
+        - shoppinglist-controller
       operationId: getAllItems
       responses:
-        200:
-          description: successful operation
+        '200':
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
     post:
-      summary: Add a new item
-      operationId: addItem
+      tags:
+        - shoppinglist-controller
+      operationId: createItem
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Item'
+        required: true
       responses:
-        200:
+        '200':
           description: OK
-          
+          content:
+            '*/*':
+              schema:
+                type: object
   /items/{id}:
     delete:
-      summary: Delete an item
+      tags:
+        - shoppinglist-controller
       operationId: deleteItemById
       parameters:
         - name: id
@@ -47,24 +50,17 @@ paths:
             type: integer
             format: int64
       responses:
-        '204':
-          description: Deleted
-        '401':
-          description: Unauthorized
-        '404':
-          description: Not found
-
+        '200':
+          description: OK
 components:
   schemas:
     Item:
-      type: object
       required:
-        - id
-        - itemlabel
+        - name
+      type: object
       properties:
         id:
           type: integer
           format: int64
-        itemlabel:
+        name:
           type: string
-
